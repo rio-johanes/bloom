@@ -1570,6 +1570,286 @@
         function nextTrack() {
             // Player implementation
         }
+
+        // Event listener untuk tombol mulai tes
+// Fungsi untuk memulai tes kesehatan mental
+function startTest(testType) {
+    if (!appData.currentUser) {
+        alert('Silakan login terlebih dahulu untuk melakukan tes kesehatan mental.');
+        return;
+    }
+    
+    appData.currentTest = testType;
+    appData.currentQuestionIndex = 0;
+    appData.testAnswers = [];
+    
+    // Tampilkan modal tes
+    document.getElementById('testTitle').textContent = appData.tests[testType].title;
+    document.getElementById('testModal').style.display = 'flex';
+    
+    // Tampilkan pertanyaan pertama
+    showQuestion();
+}
+
+// Fungsi untuk menampilkan pertanyaan
+function showQuestion() {
+    const test = appData.tests[appData.currentTest];
+    const question = test.questions[appData.currentQuestionIndex];
+    
+    // Update progress bar
+    const progress = ((appData.currentQuestionIndex + 1) / test.questions.length) * 100;
+    document.getElementById('testProgress').style.width = `${progress}%`;
+    
+    // Update counter pertanyaan
+    document.getElementById('testQuestionCounter').textContent = 
+        `Pertanyaan ${appData.currentQuestionIndex + 1}/${test.questions.length}`;
+    
+    // Tampilkan pertanyaan
+    document.getElementById('testQuestion').innerHTML = `
+        <h3 class="text-lg font-medium text-gray-800 mb-4">${question}</h3>
+    `;
+    
+    // Tampilkan opsi jawaban
+    const optionsContainer = document.getElementById('testOptions');
+    optionsContainer.innerHTML = '';
+    
+    test.options.forEach((option, index) => {
+        const optionElement = document.createElement('button');
+        optionElement.className = 'w-full text-left p-4 border border-gray-300 rounded-lg hover:bg-green-50 hover:border-green-300 transition duration-300';
+        optionElement.textContent = option;
+        optionElement.dataset.value = index;
+        optionElement.addEventListener('click', function() {
+            // Hapus seleksi dari semua opsi
+            document.querySelectorAll('#testOptions button').forEach(btn => {
+                btn.classList.remove('bg-green-100', 'border-green-500');
+            });
+            
+            // Tambahkan seleksi ke opsi yang dipilih
+            this.classList.add('bg-green-100', 'border-green-500');
+            
+            // Simpan jawaban
+            appData.testAnswers[appData.currentQuestionIndex] = parseInt(this.dataset.value);
+            
+            // Aktifkan tombol selanjutnya
+            document.getElementById('nextQuestion').disabled = false;
+        });
+        
+        optionsContainer.appendChild(optionElement);
+    });
+    
+    // Tampilkan jawaban sebelumnya jika ada
+    if (appData.testAnswers[appData.currentQuestionIndex] !== undefined) {
+        const selectedOption = document.querySelector(`#testOptions button[data-value="${appData.testAnswers[appData.currentQuestionIndex]}"]`);
+        if (selectedOption) {
+            selectedOption.classList.add('bg-green-100', 'border-green-500');
+            document.getElementById('nextQuestion').disabled = false;
+        }
+    } else {
+        document.getElementById('nextQuestion').disabled = true;
+    }
+    
+    // Tampilkan/sembunyikan tombol sebelumnya
+    if (appData.currentQuestionIndex > 0) {
+        document.getElementById('prevQuestion').style.display = 'block';
+    } else {
+        document.getElementById('prevQuestion').style.display = 'none';
+    }
+    
+    // Update teks tombol selanjutnya
+    if (appData.currentQuestionIndex === test.questions.length - 1) {
+        document.getElementById('nextQuestion').textContent = 'Selesaikan Tes';
+    } else {
+        document.getElementById('nextQuestion').textContent = 'Selanjutnya';
+    }
+}
+
+// Fungsi untuk pindah ke pertanyaan sebelumnya
+function prevQuestion() {
+    if (appData.currentQuestionIndex > 0) {
+        appData.currentQuestionIndex--;
+        showQuestion();
+    }
+}
+
+// Fungsi untuk pindah ke pertanyaan berikutnya atau menyelesaikan tes
+function nextQuestion() {
+    const test = appData.tests[appData.currentTest];
+    
+    if (appData.currentQuestionIndex < test.questions.length - 1) {
+        appData.currentQuestionIndex++;
+        showQuestion();
+    } else {
+        // Selesaikan tes
+        finishTest();
+    }
+}
+
+// Fungsi untuk menyelesaikan tes dan menampilkan hasil
+function finishTest() {
+    const test = appData.tests[appData.currentTest];
+    let totalScore = 0;
+    
+    // Hitung skor total
+    appData.testAnswers.forEach(answer => {
+        totalScore += answer;
+    });
+    
+    // Simpan hasil tes
+    const testResult = {
+        testType: appData.currentTest,
+        testName: test.title,
+        score: totalScore,
+        maxScore: test.questions.length * 3, // 3 adalah nilai tertinggi per pertanyaan
+        date: new Date().toLocaleDateString('id-ID')
+    };
+    
+    appData.testResults.push(testResult);
+    localStorage.setItem('testResults', JSON.stringify(appData.testResults));
+    
+    // Tutup modal tes
+    closeTestModal();
+    
+    // Tampilkan hasil tes
+    showTestResults(testResult);
+    
+    // Tambahkan poin
+    addPoints(test.points, test.title);
+    
+    // Tandai misi sebagai selesai
+    completeMission(2);
+}
+
+// Fungsi untuk menampilkan hasil tes
+function showTestResults(result) {
+    // Hitung persentase skor
+    const percentage = Math.round((result.score / result.maxScore) * 100);
+    
+    // Tentukan kategori berdasarkan skor
+    let category, description, color;
+    
+    if (appData.currentTest === 'phq9') {
+        if (result.score <= 4) {
+            category = "Minimal";
+            description = "Gejala depresi minimal atau tidak ada";
+            color = "#10b981"; // hijau
+        } else if (result.score <= 9) {
+            category = "Ringan";
+            description = "Gejala depresi ringan";
+            color = "#f59e0b"; // kuning
+        } else if (result.score <= 14) {
+            category = "Sedang";
+            description = "Gejala depresi sedang";
+            color = "#f97316"; // oranye
+        } else if (result.score <= 19) {
+            category = "Sedang Berat";
+            description = "Gejala depresi sedang-berat";
+            color = "#ef4444"; // merah
+        } else {
+            category = "Berat";
+            description = "Gejala depresi berat";
+            color = "#dc2626"; // merah tua
+        }
+    } else if (appData.currentTest === 'gad7') {
+        if (result.score <= 4) {
+            category = "Minimal";
+            description = "Gejala kecemasan minimal atau tidak ada";
+            color = "#10b981"; // hijau
+        } else if (result.score <= 9) {
+            category = "Ringan";
+            description = "Gejala kecemasan ringan";
+            color = "#f59e0b"; // kuning
+        } else if (result.score <= 14) {
+            category = "Sedang";
+            description = "Gejala kecemasan sedang";
+            color = "#f97316"; // oranye
+        } else {
+            category = "Berat";
+            description = "Gejala kecemasan berat";
+            color = "#ef4444"; // merah
+        }
+    }
+    
+    // Update elemen hasil tes
+    document.getElementById('scoreText').textContent = `${percentage}%`;
+    document.getElementById('scoreCategory').textContent = category;
+    document.getElementById('scoreCategory').style.color = color;
+    document.getElementById('resultDetails').innerHTML = `
+        <p>Skor Anda: ${result.score} dari ${result.maxScore}</p>
+        <p class="mt-2">${description}</p>
+        <p class="mt-4 text-sm">Hasil tes ini hanya sebagai panduan awal dan tidak menggantikan diagnosis profesional. 
+        Jika Anda merasa membutuhkan bantuan, silakan berkonsultasi dengan psikolog atau tenaga kesehatan mental profesional.</p>
+    `;
+    
+    // Update lingkaran skor
+    const circle = document.getElementById('scoreCircle');
+    const circumference = 2 * Math.PI * 45;
+    const offset = circumference - (percentage / 100) * circumference;
+    circle.style.strokeDasharray = `${circumference}`;
+    circle.style.strokeDashoffset = `${offset}`;
+    circle.style.stroke = color;
+    
+    // Tampilkan hasil tes
+    document.getElementById('testResults').style.display = 'block';
+    
+    // Scroll ke hasil tes
+    document.getElementById('testResults').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Fungsi untuk menutup modal tes
+function closeTestModal() {
+    document.getElementById('testModal').style.display = 'none';
+}
+
+// Fungsi untuk berbagi cerita di komunitas
+function openShareStoryModal() {
+    if (!appData.currentUser) {
+        alert('Silakan login terlebih dahulu untuk berbagi cerita.');
+        return;
+    }
+    
+    document.getElementById('shareStoryModal').style.display = 'flex';
+}
+
+function closeShareStoryModal() {
+    document.getElementById('shareStoryModal').style.display = 'none';
+    document.getElementById('storyText').value = '';
+}
+
+function submitStory() {
+    const storyText = document.getElementById('storyText').value.trim();
+    
+    if (!storyText) {
+        alert('Silakan tulis cerita Anda sebelum membagikannya.');
+        return;
+    }
+    
+    // Buat post baru
+    const newPost = {
+        id: appData.communityPosts.length + 1,
+        content: storyText,
+        likes: 0,
+        comments: 0,
+        timestamp: 'Baru saja'
+    };
+    
+    appData.communityPosts.unshift(newPost);
+    localStorage.setItem('communityPosts', JSON.stringify(appData.communityPosts));
+    
+    // Render ulang posts
+    renderCommunityPosts();
+    
+    // Tambahkan poin
+    addPoints(15, 'Berbagi Cerita');
+    
+    // Tandai misi sebagai selesai
+    completeMission(3);
+    
+    // Tutup modal
+    closeShareStoryModal();
+    
+    alert('Cerita Anda telah berhasil dibagikan!');
+}
     </script>
 </body>
 </html>
+
