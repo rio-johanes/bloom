@@ -100,6 +100,27 @@
         .points-badge {
             background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
         }
+        
+        /* Blur effect for non-logged in users */
+        .blur-section {
+            filter: blur(4px);
+            pointer-events: none;
+            user-select: none;
+        }
+        
+        .login-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border-radius: 1rem;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -238,7 +259,17 @@
             <p class="text-lg text-center text-gray-600 mb-12 max-w-2xl mx-auto">Selesaikan misi harian dan login setiap hari untuk mendapatkan poin yang dapat ditukarkan dengan konsultasi gratis.</p>
             
             <!-- Daily Login -->
-            <div class="login-streak rounded-2xl p-6 mb-8">
+            <div class="login-streak rounded-2xl p-6 mb-8 relative">
+                <div id="loginOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk mengakses fitur Misi Harian</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="mb-4 md:mb-0">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">Login Harian</h3>
@@ -257,12 +288,32 @@
             </div>
             
             <!-- Misi Harian -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative">
+                <div id="missionsOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk mengakses Misi Harian</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
                 <!-- Misi akan diisi oleh JavaScript -->
             </div>
             
             <!-- Info Poin -->
-            <div class="mt-12 bg-white rounded-2xl p-6 max-w-2xl mx-auto">
+            <div class="mt-12 bg-white rounded-2xl p-6 max-w-2xl mx-auto relative">
+                <div id="pointsInfoOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk melihat informasi poin</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
                 <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Cara Mendapatkan & Menggunakan Poin</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -310,7 +361,17 @@
             <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Tes Kesehatan Mental</h2>
             <p class="text-lg text-center text-gray-600 mb-12 max-w-2xl mx-auto">Lakukan pengecekan kesehatan mental Anda dengan tes yang telah divalidasi oleh para ahli.</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
+                <div id="testsOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk mengakses Tes Kesehatan Mental</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
                 <!-- Tes Depresi -->
                 <div class="bg-white rounded-2xl p-6 shadow-sm card-hover">
                     <div class="flex justify-between items-start">
@@ -374,7 +435,17 @@
             <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Komunitas Support</h2>
             <p class="text-lg text-center text-gray-600 mb-12 max-w-2xl mx-auto">Berbagi cerita dan pengalaman secara anonim dengan komunitas yang saling mendukung.</p>
             
-            <div id="communityPosts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <div id="communityPosts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 relative">
+                <div id="communityOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk mengakses Komunitas Support</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
                 <!-- Post akan diisi oleh JavaScript -->
             </div>
             
@@ -392,7 +463,17 @@
             <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Konsultasi dengan Psikolog</h2>
             <p class="text-lg text-center text-gray-600 mb-12 max-w-2xl mx-auto">Konsultasi dengan psikolog profesional via chat, telepon, atau video call sesuai kenyamanan Anda.</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 relative">
+                <div id="consultationOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk mengakses Konsultasi Psikolog</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
                 <!-- Psikolog akan diisi oleh JavaScript -->
             </div>
             
@@ -410,11 +491,31 @@
             <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Meditasi & Relaksasi</h2>
             <p class="text-lg text-center text-gray-600 mb-12 max-w-2xl mx-auto">Temukan ketenangan dengan panduan meditasi dan musik relaksasi.</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 relative">
+                <div id="meditationOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk mengakses Meditasi & Relaksasi</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
                 <!-- Meditasi akan diisi oleh JavaScript -->
             </div>
             
-            <div class="meditation-player rounded-2xl p-8 max-w-4xl mx-auto">
+            <div class="meditation-player rounded-2xl p-8 max-w-4xl mx-auto relative">
+                <div id="musicOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk mengakses Musik Relaksasi</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
                 <div class="flex flex-col md:flex-row items-center">
                     <div class="md:w-1/2 mb-6 md:mb-0">
                         <h3 class="text-2xl font-bold text-white mb-4">Musik Relaksasi</h3>
@@ -534,6 +635,85 @@
             </div>
         </div>
     </footer>
+
+    <!-- Modal untuk Login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Masuk ke Bloom</h3>
+                <button id="closeLoginModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="email@contoh.com">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 mb-2" for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Password">
+            </div>
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center">
+                    <input type="checkbox" id="rememberMe" class="w-4 h-4 text-green-500 border-gray-300 rounded focus:ring-green-500">
+                    <label for="rememberMe" class="ml-2 text-sm text-gray-600">Ingat saya</label>
+                </div>
+                <a href="#" class="text-sm text-green-500 hover:text-green-700">Lupa password?</a>
+            </div>
+            <button id="submitLogin" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-medium transition duration-300 mb-4">
+                Masuk
+            </button>
+            <div class="text-center">
+                <span class="text-gray-600">Belum punya akun? </span>
+                <button id="switchToRegister" class="text-green-500 hover:text-green-700 font-medium">
+                    Daftar di sini
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk Daftar -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Daftar ke Bloom</h3>
+                <button id="closeRegisterModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="registerName">Nama Lengkap</label>
+                <input type="text" id="registerName" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Nama lengkap">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="email@contoh.com">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 mb-2" for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Password (minimal 6 karakter)">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 mb-2" for="registerConfirmPassword">Konfirmasi Password</label>
+                <input type="password" id="registerConfirmPassword" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Ulangi password">
+            </div>
+            <div class="mb-4">
+                <div class="flex items-center">
+                    <input type="checkbox" id="agreeTerms" class="w-4 h-4 text-green-500 border-gray-300 rounded focus:ring-green-500">
+                    <label for="agreeTerms" class="ml-2 text-sm text-gray-600">Saya setuju dengan <a href="#" class="text-green-500 hover:text-green-700">Syarat & Ketentuan</a></label>
+                </div>
+            </div>
+            <button id="submitRegister" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-medium transition duration-300 mb-4">
+                Daftar
+            </button>
+            <div class="text-center">
+                <span class="text-gray-600">Sudah punya akun? </span>
+                <button id="switchToLogin" class="text-green-500 hover:text-green-700 font-medium">
+                    Masuk di sini
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal untuk Tes Kesehatan Mental -->
     <div id="testModal" class="modal">
@@ -804,7 +984,17 @@
             loginStreak: parseInt(localStorage.getItem('loginStreak')) || 0,
             lastLoginDate: localStorage.getItem('lastLoginDate') || null,
             weeklyConsultations: parseInt(localStorage.getItem('weeklyConsultations')) || 0,
-            lastConsultationReset: localStorage.getItem('lastConsultationReset') || null
+            lastConsultationReset: localStorage.getItem('lastConsultationReset') || null,
+            
+            // Data pengguna
+            users: JSON.parse(localStorage.getItem('users')) || [
+                {
+                    id: 1,
+                    name: "User Demo",
+                    email: "demo@bloom.com",
+                    password: "demo123"
+                }
+            ]
         };
 
         // Inisialisasi aplikasi
@@ -818,6 +1008,7 @@
             updatePointsDisplay();
             updateLoginStreak();
             checkWeeklyReset();
+            updateSectionAccess();
         });
 
         function initializeApp() {
@@ -847,6 +1038,21 @@
                         });
                     }
                 });
+            });
+
+            // Login & Register
+            document.getElementById('loginBtn').addEventListener('click', openLoginModal);
+            document.getElementById('registerBtn').addEventListener('click', openRegisterModal);
+            document.getElementById('closeLoginModal').addEventListener('click', closeLoginModal);
+            document.getElementById('closeRegisterModal').addEventListener('click', closeRegisterModal);
+            document.getElementById('submitLogin').addEventListener('click', submitLogin);
+            document.getElementById('submitRegister').addEventListener('click', submitRegister);
+            document.getElementById('switchToRegister').addEventListener('click', switchToRegister);
+            document.getElementById('switchToLogin').addEventListener('click', switchToLogin);
+
+            // Login dari section yang terkunci
+            document.querySelectorAll('.login-from-section').forEach(button => {
+                button.addEventListener('click', openLoginModal);
             });
 
             // Notifikasi positif
@@ -899,6 +1105,167 @@
             document.getElementById('dailyLoginBtn').addEventListener('click', processDailyLogin);
         }
 
+        function updateSectionAccess() {
+            const isLoggedIn = appData.currentUser !== null;
+            
+            // Semua overlay section
+            const overlays = [
+                'loginOverlay', 'missionsOverlay', 'pointsInfoOverlay', 
+                'testsOverlay', 'communityOverlay', 'consultationOverlay', 
+                'meditationOverlay', 'musicOverlay'
+            ];
+            
+            // Tampilkan atau sembunyikan overlay berdasarkan status login
+            overlays.forEach(overlayId => {
+                const overlay = document.getElementById(overlayId);
+                if (overlay) {
+                    overlay.style.display = isLoggedIn ? 'none' : 'flex';
+                }
+            });
+            
+            // Update status tombol berdasarkan login
+            const actionButtons = document.querySelectorAll('.start-test, #shareStoryBtn, #consultationBtn, #quickTestBtn, .start-meditation, #playRelaxation, #dailyLoginBtn');
+            actionButtons.forEach(button => {
+                if (!isLoggedIn) {
+                    button.setAttribute('disabled', 'true');
+                    button.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    button.removeAttribute('disabled');
+                    button.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            });
+        }
+
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            // Reset form
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        function openRegisterModal() {
+            document.getElementById('registerModal').style.display = 'flex';
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').style.display = 'none';
+            // Reset form
+            document.getElementById('registerName').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('registerConfirmPassword').value = '';
+        }
+
+        function switchToRegister() {
+            closeLoginModal();
+            openRegisterModal();
+        }
+
+        function switchToLogin() {
+            closeRegisterModal();
+            openLoginModal();
+        }
+
+        function submitLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                alert('Silakan isi email dan password.');
+                return;
+            }
+            
+            // Cari pengguna
+            const user = appData.users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // Login berhasil
+                appData.currentUser = {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email
+                };
+                
+                // Simpan ke localStorage
+                localStorage.setItem('currentUser', JSON.stringify(appData.currentUser));
+                
+                // Update UI
+                updateLoginState();
+                updateSectionAccess();
+                closeLoginModal();
+                
+                alert(`Selamat datang, ${user.name}!`);
+            } else {
+                alert('Email atau password salah. Silakan coba lagi.');
+            }
+        }
+
+        function submitRegister() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            
+            if (!name || !email || !password || !confirmPassword) {
+                alert('Silakan lengkapi semua field.');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Password dan konfirmasi password tidak cocok.');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('Password harus minimal 6 karakter.');
+                return;
+            }
+            
+            if (!agreeTerms) {
+                alert('Anda harus menyetujui Syarat & Ketentuan.');
+                return;
+            }
+            
+            // Cek apakah email sudah terdaftar
+            const existingUser = appData.users.find(u => u.email === email);
+            if (existingUser) {
+                alert('Email sudah terdaftar. Silakan gunakan email lain.');
+                return;
+            }
+            
+            // Buat pengguna baru
+            const newUser = {
+                id: appData.users.length + 1,
+                name: name,
+                email: email,
+                password: password
+            };
+            
+            appData.users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(appData.users));
+            
+            // Login otomatis setelah registrasi
+            appData.currentUser = {
+                id: newUser.id,
+                name: newUser.name,
+                email: newUser.email
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(appData.currentUser));
+            
+            // Update UI
+            updateLoginState();
+            updateSectionAccess();
+            closeRegisterModal();
+            
+            alert(`Pendaftaran berhasil! Selamat datang, ${name}!`);
+        }
+
         function updateLoginState() {
             const loginBtn = document.getElementById('loginBtn');
             const registerBtn = document.getElementById('registerBtn');
@@ -909,6 +1276,7 @@
                 registerBtn.textContent = 'Keluar';
                 registerBtn.onclick = logout;
                 pointsDisplay.classList.remove('hidden');
+                updatePointsDisplay();
             } else {
                 loginBtn.textContent = 'Masuk';
                 registerBtn.textContent = 'Daftar';
@@ -921,6 +1289,7 @@
             appData.currentUser = null;
             localStorage.removeItem('currentUser');
             updateLoginState();
+            updateSectionAccess();
             alert('Anda telah berhasil keluar.');
         }
 
@@ -934,7 +1303,7 @@
             
             // Jika sudah login hari ini
             if (appData.lastLoginDate === today) {
-                alert('Anda sudah login hari ini. Kembi besok untuk mendapatkan poin lagi!');
+                alert('Anda sudah login hari ini. Kembali besok untuk mendapatkan poin lagi!');
                 return;
             }
             
@@ -1549,6 +1918,11 @@
         }
 
         function playRelaxation() {
+            if (!appData.currentUser) {
+                alert('Silakan login terlebih dahulu untuk memutar musik relaksasi.');
+                return;
+            }
+            
             appData.currentTrack = 0;
             loadTrack(appData.currentTrack);
             togglePlayPause();
