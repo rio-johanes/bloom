@@ -1,1 +1,2117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloom - Kesehatan Mental Anda Prioritas Kami</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .hero-bg {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .lotus-logo {
+            position: relative;
+            width: 40px;
+            height: 40px;
+        }
+        .lotus-petal {
+            position: absolute;
+            width: 20px;
+            height: 30px;
+            background-color: #10b981;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transform-origin: center bottom;
+        }
+        .lotus-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            background-color: #065f46;
+            border-radius: 50%;
+        }
+        .lotus-petal:nth-child(1) { transform: rotate(0deg); }
+        .lotus-petal:nth-child(2) { transform: rotate(45deg); }
+        .lotus-petal:nth-child(3) { transform: rotate(90deg); }
+        .lotus-petal:nth-child(4) { transform: rotate(135deg); }
+        .lotus-petal:nth-child(5) { transform: rotate(180deg); }
+        .lotus-petal:nth-child(6) { transform: rotate(225deg); }
+        .lotus-petal:nth-child(7) { transform: rotate(270deg); }
+        .lotus-petal:nth-child(8) { transform: rotate(315deg); }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: white;
+            border-radius: 1rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #10b981;
+            transition: width 0.3s ease;
+        }
+        
+        /* Meditation Player */
+        .meditation-player {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        /* Daily Login */
+        .login-streak {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        }
+        
+        /* Points Badge */
+        .points-badge {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+        
+        /* Blur effect for non-logged in users */
+        .login-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border-radius: 1rem;
+            backdrop-filter: blur(2px);
+        }
+        
+        /* Konsultasi styles */
+        .consultation-type {
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .consultation-type:hover {
+            border-color: #10b981;
+        }
+        .consultation-type.selected {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+        }
+        .time-slot {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .time-slot:hover {
+            border-color: #10b981;
+        }
+        .time-slot.selected {
+            background-color: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+        .date-option {
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .date-option:hover {
+            border-color: #10b981;
+        }
+        .date-option.selected {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <h1 class="text-2xl font-bold text-green-600">Bloom</h1>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="#beranda" class="text-green-600 font-medium hover:text-green-500">Beranda</a>
+                <a href="#tes" class="text-gray-600 font-medium hover:text-green-500">Tes Kesehatan</a>
+                <a href="#komunitas" class="text-gray-600 font-medium hover:text-green-500">Komunitas</a>
+                <a href="#konsultasi" class="text-gray-600 font-medium hover:text-green-500">Konsultasi</a>
+                <a href="#meditasi" class="text-gray-600 font-medium hover:text-green-500">Meditasi</a>
+                <a href="#misi" class="text-gray-600 font-medium hover:text-green-500">Misi Harian</a>
+            </nav>
+            
+            <div class="flex items-center space-x-4">
+                <div id="pointsDisplay" class="hidden md:flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full">
+                    <i class="fas fa-coins mr-1"></i>
+                    <span id="pointsValue">0</span> Poin
+                </div>
+                <button id="loginBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full font-medium transition duration-300">
+                    Masuk
+                </button>
+                <button id="registerBtn" class="hidden md:block border border-green-500 text-green-500 hover:bg-green-50 px-4 py-2 rounded-full font-medium transition duration-300">
+                    Daftar
+                </button>
+                <button class="md:hidden text-gray-600" id="mobileMenuBtn">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
 
+    <!-- Hero Section -->
+    <section id="beranda" class="hero-bg py-16 md:py-24">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Kesehatan Mental Anda <span class="text-green-500">Prioritas Kami</span></h1>
+                <p class="text-lg text-gray-600 mb-8">Platform kesehatan mental terpercaya dengan psikolog profesional, komunitas yang mendukung, dan berbagai fitur untuk menjaga kesejahteraan mental Anda.</p>
+                <div class="flex flex-wrap gap-4">
+                    <button id="consultationBtn" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-medium transition duration-300 flex items-center">
+                        <i class="fas fa-calendar-check mr-2"></i> Buat Janji Konsultasi
+                    </button>
+                    <button class="border border-green-500 text-green-500 hover:bg-green-50 px-6 py-3 rounded-full font-medium transition duration-300 flex items-center">
+                        <i class="fas fa-user-md mr-2"></i> Cari Psikolog
+                    </button>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <div class="relative w-full max-w-md">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 card-hover">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-brain text-green-500 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">Tes Kesehatan Mental</h3>
+                                <p class="text-sm text-gray-500">Cek kondisi mental Anda sekarang</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">Lakukan pengecekan kesehatan mental Anda dengan tes yang telah divalidasi oleh para ahli.</p>
+                        <button id="quickTestBtn" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg font-medium transition duration-300">
+                            Mulai Tes Sekarang
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fitur Utama -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Layanan Kami</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Tes Kesehatan Mental -->
+                <div class="bg-green-50 rounded-2xl p-6 card-hover">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-clipboard-check text-green-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Tes Kesehatan Mental</h3>
+                    <p class="text-gray-600 mb-4">Lakukan pengecekan kesehatan mental dengan tes yang telah divalidasi oleh para ahli.</p>
+                    <a href="#tes" class="text-green-500 font-medium flex items-center">
+                        Coba sekarang <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Komunitas -->
+                <div class="bg-green-50 rounded-2xl p-6 card-hover">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-users text-green-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Komunitas Support</h3>
+                    <p class="text-gray-600 mb-4">Berbagi cerita dan pengalaman secara anonim dengan komunitas yang mendukung.</p>
+                    <a href="#komunitas" class="text-green-500 font-medium flex items-center">
+                        Jelajahi <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Konsultasi Psikolog -->
+                <div class="bg-green-50 rounded-2xl p-6 card-hover">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-user-md text-green-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Konsultasi Psikolog</h3>
+                    <p class="text-gray-600 mb-4">Konsultasi dengan psikolog profesional via chat, telepon, atau video call.</p>
+                    <a href="#konsultasi" class="text-green-500 font-medium flex items-center">
+                        Buat Janji <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Meditasi -->
+                <div class="bg-green-50 rounded-2xl p-6 card-hover">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-spa text-green-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Meditasi & Relaksasi</h3>
+                    <p class="text-gray-600 mb-4">Temukan ketenangan dengan panduan meditasi dan musik relaksasi.</p>
+                    <a href="#meditasi" class="text-green-500 font-medium flex items-center">
+                        Mulai Meditasi <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Misi Harian & Daily Login -->
+    <section id="misi" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Misi Harian & Poin</h2>
+            <p class="text-lg text-center text-gray-600 mb-12 max-w-2xl mx-auto">Selesaikan misi harian dan login setiap hari untuk mendapatkan poin yang dapat ditukarkan dengan konsultasi gratis.</p>
+            
+            <!-- Daily Login -->
+            <div class="login-streak rounded-2xl p-6 mb-8 relative">
+                <div id="loginOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk mengakses fitur Misi Harian</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-4 md:mb-0">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Login Harian</h3>
+                        <p class="text-gray-600">Login setiap hari untuk mendapatkan poin tambahan!</p>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="mr-4 text-center">
+                            <div class="text-2xl font-bold text-amber-600" id="streakCount">0</div>
+                            <div class="text-sm text-gray-600">Hari Berturut-turut</div>
+                        </div>
+                        <button id="dailyLoginBtn" class="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-full font-medium transition duration-300 flex items-center">
+                            <i class="fas fa-calendar-day mr-2"></i> Login Hari Ini
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Misi Harian -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative">
+                <div id="missionsOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk mengakses Misi Harian</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
+                <!-- Misi akan diisi oleh JavaScript -->
+            </div>
+            
+            <!-- Info Poin -->
+            <div class="mt-12 bg-white rounded-2xl p-6 max-w-2xl mx-auto relative">
+                <div id="pointsInfoOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk melihat informasi poin</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Cara Mendapatkan & Menggunakan Poin</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold text-gray-700 mb-2">Cara Mendapatkan Poin:</h4>
+                        <ul class="text-gray-600 space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>Login harian: 10 poin</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>Menyelesaikan tes kesehatan: 25 poin</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>Berbagi cerita di komunitas: 15 poin</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>Meditasi selama 10 menit: 20 poin</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-700 mb-2">Cara Menggunakan Poin:</h4>
+                        <ul class="text-gray-600 space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-exchange-alt text-green-500 mt-1 mr-2"></i>
+                                <span>Konsultasi gratis 2x per minggu</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-exchange-alt text-green-500 mt-1 mr-2"></i>
+                                <span>Konsultasi tambahan: 100 poin/sesi</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tes Kesehatan Mental -->
+    <section id="tes" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Tes Kesehatan Mental</h2>
+            <p class="text-lg text-center text-gray-600 mb-12 max-w-2xl mx-auto">Lakukan pengecekan kesehatan mental Anda dengan tes yang telah divalidasi oleh para ahli.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
+                <div id="testsOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk mengakses Tes Kesehatan Mental</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
+                <!-- Tes Depresi -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm card-hover">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Tes Depresi (PHQ-9)</h3>
+                            <p class="text-gray-600 mb-4">Tes untuk mengevaluasi gejala depresi dalam 2 minggu terakhir.</p>
+                        </div>
+                        <div class="points-badge text-white px-3 py-1 rounded-full text-sm font-medium">
+                            +25 Poin
+                        </div>
+                    </div>
+                    <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition duration-300 start-test" data-test="phq9">
+                        Mulai Tes
+                    </button>
+                </div>
+                
+                <!-- Tes Kecemasan -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm card-hover">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Tes Kecemasan (GAD-7)</h3>
+                            <p class="text-gray-600 mb-4">Tes untuk mengevaluasi tingkat kecemasan yang Anda alami.</p>
+                        </div>
+                        <div class="points-badge text-white px-3 py-1 rounded-full text-sm font-medium">
+                            +25 Poin
+                        </div>
+                    </div>
+                    <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition duration-300 start-test" data-test="gad7">
+                        Mulai Tes
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Hasil Tes -->
+            <div id="testResults" class="mt-12 bg-white rounded-2xl shadow-lg p-8 max-w-2xl mx-auto" style="display: none;">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Hasil Tes Terakhir</h3>
+                <div class="flex justify-center mb-6">
+                    <div class="relative w-40 h-40">
+                        <svg class="w-full h-full" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#e5e7eb" stroke-width="10"/>
+                            <circle id="scoreCircle" cx="50" cy="50" r="45" fill="none" stroke="#10b981" stroke-width="10" stroke-dasharray="283" stroke-dashoffset="70" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+                            <text id="scoreText" x="50" y="50" text-anchor="middle" dy="7" font-size="20" font-weight="bold" fill="#1f2937">75%</text>
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-center text-gray-600 mb-2">Skor Kesehatan Mental Anda</p>
+                <p id="scoreCategory" class="text-center text-green-500 font-medium mb-6">Baik</p>
+                <div id="resultDetails" class="text-center text-gray-600 mb-6">
+                    <!-- Detail hasil akan diisi oleh JavaScript -->
+                </div>
+                <button id="retakeTest" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-medium transition duration-300">
+                    Ulangi Tes
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Komunitas -->
+    <section id="komunitas" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Komunitas Support</h2>
+            <p class="text-lg text-center text-gray-600 mb-12 max-w-2xl mx-auto">Berbagi cerita dan pengalaman secara anonim dengan komunitas yang saling mendukung.</p>
+            
+            <div id="communityPosts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 relative">
+                <div id="communityOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk mengakses Komunitas Support</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
+                <!-- Post akan diisi oleh JavaScript -->
+            </div>
+            
+            <div class="text-center">
+                <button id="shareStoryBtn" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-medium transition duration-300 flex items-center mx-auto">
+                    <i class="fas fa-plus mr-2"></i> Bagikan Cerita Anda
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Konsultasi Psikolog -->
+    <section id="konsultasi" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Konsultasi dengan Psikolog</h2>
+            <p class="text-lg text-center text-gray-600 mb-12 max-w-2xl mx-auto">Konsultasi dengan psikolog profesional via chat, telepon, atau video call sesuai kenyamanan Anda.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 relative">
+                <div id="consultationOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk mengakses Konsultasi Psikolog</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
+                <!-- Psikolog akan diisi oleh JavaScript -->
+            </div>
+            
+            <div class="text-center">
+                <button class="border border-green-500 text-green-500 hover:bg-green-50 px-6 py-3 rounded-full font-medium transition duration-300">
+                    Lihat Semua Psikolog
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meditasi -->
+    <section id="meditasi" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Meditasi & Relaksasi</h2>
+            <p class="text-lg text-center text-gray-600 mb-12 max-w-2xl mx-auto">Temukan ketenangan dengan panduan meditasi dan musik relaksasi.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 relative">
+                <div id="meditationOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk mengakses Meditasi & Relaksasi</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
+                <!-- Meditasi akan diisi oleh JavaScript -->
+            </div>
+            
+            <div class="meditation-player rounded-2xl p-8 max-w-4xl mx-auto relative">
+                <div id="musicOverlay" class="login-overlay hidden">
+                    <div class="text-center">
+                        <i class="fas fa-lock text-4xl text-green-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Silakan Login</h3>
+                        <p class="text-gray-600 mb-4">Login untuk mengakses Musik Relaksasi</p>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition duration-300 login-from-section">
+                            Login Sekarang
+                        </button>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-6 md:mb-0">
+                        <h3 class="text-2xl font-bold text-white mb-4">Musik Relaksasi</h3>
+                        <p class="text-green-100 mb-4">Dengarkan koleksi musik relaksasi yang dirancang khusus untuk menenangkan pikiran dan mengurangi stres.</p>
+                        <button id="playRelaxation" class="bg-white hover:bg-green-50 text-green-600 px-6 py-3 rounded-full font-medium transition duration-300 flex items-center">
+                            <i class="fas fa-play mr-2"></i> Putar Sekarang
+                        </button>
+                    </div>
+                    <div class="md:w-1/2 flex justify-center">
+                        <div class="bg-white rounded-2xl p-6 shadow-md w-full max-w-xs">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-green-200 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fas fa-music text-green-600"></i>
+                                </div>
+                                <div>
+                                    <h4 id="trackTitle" class="font-bold text-gray-800">Suara Alam</h4>
+                                    <p id="trackDesc" class="text-sm text-gray-500">Hujan & Burung</p>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="h-1 bg-gray-200 rounded-full">
+                                    <div id="progressBar" class="h-1 bg-green-500 rounded-full w-0"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span id="currentTime">0:00</span>
+                                    <span id="totalTime">0:00</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <button id="prevTrack" class="text-gray-500 hover:text-green-500">
+                                    <i class="fas fa-step-backward"></i>
+                                </button>
+                                <button id="playPause" class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button id="nextTrack" class="text-gray-500 hover:text-green-500">
+                                    <i class="fas fa-step-forward"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-green-800 text-white pt-12 pb-6">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="lotus-logo mr-3">
+                            <div class="lotus-petal"></div>
+                            <div class="lotus-petal"></div>
+                            <div class="lotus-petal"></div>
+                            <div class="lotus-petal"></div>
+                            <div class="lotus-petal"></div>
+                            <div class="lotus-petal"></div>
+                            <div class="lotus-petal"></div>
+                            <div class="lotus-petal"></div>
+                            <div class="lotus-center"></div>
+                        </div>
+                        <h2 class="text-2xl font-bold">Bloom</h2>
+                    </div>
+                    <p class="text-green-200 mb-4">Platform kesehatan mental terpercaya dengan psikolog profesional dan komunitas yang mendukung.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-green-200 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-green-200 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-green-200 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Layanan</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#tes" class="text-green-200 hover:text-white">Tes Kesehatan Mental</a></li>
+                        <li><a href="#komunitas" class="text-green-200 hover:text-white">Komunitas</a></li>
+                        <li><a href="#konsultasi" class="text-green-200 hover:text-white">Konsultasi Psikolog</a></li>
+                        <li><a href="#meditasi" class="text-green-200 hover:text-white">Meditasi & Relaksasi</a></li>
+                        <li><a href="#misi" class="text-green-200 hover:text-white">Misi Harian</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Bantuan</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-green-200 hover:text-white">FAQ</a></li>
+                        <li><a href="#" class="text-green-200 hover:text-white">Kebijakan Privasi</a></li>
+                        <li><a href="#" class="text-green-200 hover:text-white">Syarat & Ketentuan</a></li>
+                        <li><a href="#" class="text-green-200 hover:text-white">Kontak Kami</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Download Aplikasi</h3>
+                    <p class="text-green-200 mb-4">Dapatkan pengalaman terbaik dengan aplikasi mobile kami.</p>
+                    <div class="flex space-x-2">
+                        <button class="bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-lg flex items-center">
+                            <i class="fab fa-apple mr-2"></i> App Store
+                        </button>
+                        <button class="bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-lg flex items-center">
+                            <i class="fab fa-google-play mr-2"></i> Play Store
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-green-700 pt-6 text-center text-green-300">
+                <p>&copy; 2023 Bloom. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal untuk Login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Masuk ke Bloom</h3>
+                <button id="closeLoginModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="email@contoh.com" value="demo@bloom.com">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 mb-2" for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Password" value="demo123">
+            </div>
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center">
+                    <input type="checkbox" id="rememberMe" class="w-4 h-4 text-green-500 border-gray-300 rounded focus:ring-green-500">
+                    <label for="rememberMe" class="ml-2 text-sm text-gray-600">Ingat saya</label>
+                </div>
+                <a href="#" class="text-sm text-green-500 hover:text-green-700">Lupa password?</a>
+            </div>
+            <button id="submitLogin" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-medium transition duration-300 mb-4">
+                Masuk
+            </button>
+            <div class="text-center">
+                <span class="text-gray-600">Belum punya akun? </span>
+                <button id="switchToRegister" class="text-green-500 hover:text-green-700 font-medium">
+                    Daftar di sini
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk Daftar -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Daftar ke Bloom</h3>
+                <button id="closeRegisterModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="registerName">Nama Lengkap</label>
+                <input type="text" id="registerName" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Nama lengkap">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="email@contoh.com">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 mb-2" for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Password (minimal 6 karakter)">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 mb-2" for="registerConfirmPassword">Konfirmasi Password</label>
+                <input type="password" id="registerConfirmPassword" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Ulangi password">
+            </div>
+            <div class="mb-4">
+                <div class="flex items-center">
+                    <input type="checkbox" id="agreeTerms" class="w-4 h-4 text-green-500 border-gray-300 rounded focus:ring-green-500">
+                    <label for="agreeTerms" class="ml-2 text-sm text-gray-600">Saya setuju dengan <a href="#" class="text-green-500 hover:text-green-700">Syarat & Ketentuan</a></label>
+                </div>
+            </div>
+            <button id="submitRegister" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-medium transition duration-300 mb-4">
+                Daftar
+            </button>
+            <div class="text-center">
+                <span class="text-gray-600">Sudah punya akun? </span>
+                <button id="switchToLogin" class="text-green-500 hover:text-green-700 font-medium">
+                    Masuk di sini
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk Tes Kesehatan Mental -->
+    <div id="testModal" class="modal">
+        <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="testTitle" class="text-xl font-bold text-gray-800">Tes Kesehatan Mental</h3>
+                <button id="closeTestModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <div class="progress-bar">
+                    <div id="testProgress" class="progress-fill" style="width: 0%"></div>
+                </div>
+                <p id="testQuestionCounter" class="text-sm text-gray-500 mt-2 text-right">Pertanyaan 0/10</p>
+            </div>
+            <div id="testQuestion" class="mb-6">
+                <!-- Pertanyaan akan diisi oleh JavaScript -->
+            </div>
+            <div id="testOptions" class="space-y-3">
+                <!-- Opsi jawaban akan diisi oleh JavaScript -->
+            </div>
+            <div class="flex justify-between mt-6">
+                <button id="prevQuestion" class="text-green-500 hover:text-green-700 font-medium" style="display: none;">
+                    <i class="fas fa-arrow-left mr-2"></i> Sebelumnya
+                </button>
+                <button id="nextQuestion" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium ml-auto">
+                    Selanjutnya
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk Berbagi Cerita -->
+    <div id="shareStoryModal" class="modal">
+        <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Bagikan Cerita Anda</h3>
+                <button id="closeShareModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <textarea id="storyText" class="w-full h-40 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Bagikan pengalaman atau perasaan Anda di sini..."></textarea>
+            </div>
+            <div class="flex justify-end">
+                <button id="cancelStory" class="text-gray-500 hover:text-gray-700 font-medium mr-4">
+                    Batal
+                </button>
+                <button id="submitStory" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium">
+                    Bagikan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk Konsultasi -->
+    <div id="consultationModal" class="modal">
+        <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="consultationTitle" class="text-xl font-bold text-gray-800">Buat Janji Konsultasi</h3>
+                <button id="closeConsultationModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="consultationForm">
+                <!-- Form konsultasi akan diisi oleh JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data untuk aplikasi
+        const appData = {
+            currentUser: null,
+            testResults: JSON.parse(localStorage.getItem('testResults')) || [],
+            communityPosts: JSON.parse(localStorage.getItem('communityPosts')) || [
+                {
+                    id: 1,
+                    content: "Hari ini aku berhasil bangun dari tempat tidur meski berat sekali. Rasanya seperti kemenangan kecil.",
+                    likes: 24,
+                    comments: 8,
+                    timestamp: "2 jam yang lalu"
+                },
+                {
+                    id: 2,
+                    content: "Baru saja menyelesaikan sesi meditasi pertama setelah sekian lama. Rasanya lega sekali.",
+                    likes: 42,
+                    comments: 12,
+                    timestamp: "5 jam yang lalu"
+                },
+                {
+                    id: 3,
+                    content: "Terima kasih untuk semua yang telah memberikan dukungan di sini. Membaca cerita kalian membuatku merasa tidak sendirian.",
+                    likes: 67,
+                    comments: 15,
+                    timestamp: "1 hari yang lalu"
+                }
+            ],
+            psychologists: [
+                {
+                    id: 1,
+                    name: "Dr. Sari Indah, M.Psi.",
+                    specialty: "Psikolog Klinis",
+                    description: "Spesialisasi: Depresi, Kecemasan, dan Gangguan Mood",
+                    rating: 4.9,
+                    consultations: 1200,
+                    availableSlots: [
+                        { date: "2023-06-15", times: ["09:00", "11:00", "14:00", "16:00"] },
+                        { date: "2023-06-16", times: ["10:00", "13:00", "15:00"] },
+                        { date: "2023-06-17", times: ["09:00", "11:00", "14:00"] }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Dr. Andi Pratama, M.Psi.",
+                    specialty: "Psikolog Klinis",
+                    description: "Spesialisasi: Trauma, PTSD, dan Konseling Keluarga",
+                    rating: 4.8,
+                    consultations: 980,
+                    availableSlots: [
+                        { date: "2023-06-15", times: ["10:00", "13:00", "15:00"] },
+                        { date: "2023-06-16", times: ["09:00", "11:00", "14:00", "16:00"] },
+                        { date: "2023-06-18", times: ["10:00", "13:00", "15:00"] }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: "Dr. Maya Sari, M.Psi., Psikolog",
+                    specialty: "Psikolog Anak & Remaja",
+                    description: "Spesialisasi: Masalah Perkembangan, ADHD, dan Bullying",
+                    rating: 4.9,
+                    consultations: 1500,
+                    availableSlots: [
+                        { date: "2023-06-15", times: ["09:00", "11:00", "14:00"] },
+                        { date: "2023-06-16", times: ["10:00", "13:00", "15:00"] },
+                        { date: "2023-06-19", times: ["09:00", "11:00", "14:00", "16:00"] }
+                    ]
+                }
+            ],
+            consultationTypes: [
+                { id: 1, name: "Chat", icon: "comment", description: "Konsultasi via chat dengan psikolog", price: "Gratis (2x/minggu)" },
+                { id: 2, name: "Telepon", icon: "phone", description: "Konsultasi via telepon dengan psikolog", price: "50 poin" },
+                { id: 3, name: "Video Call", icon: "video", description: "Konsultasi via video call dengan psikolog", price: "100 poin" }
+            ],
+            meditations: [
+                {
+                    id: 1,
+                    title: "Meditasi Pernapasan",
+                    description: "Panduan meditasi 10 menit untuk menenangkan pikiran.",
+                    duration: "10 menit",
+                    icon: "spa",
+                    points: 20
+                },
+                {
+                    id: 2,
+                    title: "Tidur Nyenyak",
+                    description: "Meditasi panduan untuk meningkatkan kualitas tidur.",
+                    duration: "15 menit",
+                    icon: "bed",
+                    points: 20
+                },
+                {
+                    id: 3,
+                    title: "Redakan Kecemasan",
+                    description: "Teknik relaksasi untuk meredakan serangan kecemasan.",
+                    duration: "12 menit",
+                    icon: "wind",
+                    points: 20
+                },
+                {
+                    id: 4,
+                    title: "Mindfulness Harian",
+                    description: "Latihan mindfulness untuk meningkatkan kesadaran.",
+                    duration: "8 menit",
+                    icon: "mountain",
+                    points: 20
+                }
+            ],
+            relaxationTracks: [
+                {
+                    id: 1,
+                    title: "Suara Alam",
+                    description: "Hujan & Burung",
+                    duration: 300
+                },
+                {
+                    id: 2,
+                    title: "Gelombang Samudra",
+                    description: "Ombak & Angin Laut",
+                    duration: 420
+                },
+                {
+                    id: 3,
+                    title: "Hutan yang Tenang",
+                    description: "Kicau Burung & Daun Bergemerisik",
+                    duration: 360
+                }
+            ],
+            currentTrack: 0,
+            isPlaying: false,
+            currentTime: 0,
+            timerInterval: null,
+            
+            // Data untuk tes kesehatan mental
+            tests: {
+                phq9: {
+                    title: "Tes Depresi (PHQ-9)",
+                    questions: [
+                        "Seberapa sering Anda merasa sedikit minat atau kesenangan dalam melakukan sesuatu?",
+                        "Seberapa sering Anda merasa down, depresi, atau putus asa?",
+                        "Seberapa sering Anda mengalami kesulitan tidur atau tidur terlalu banyak?",
+                        "Seberapa sering Anda merasa lelah atau memiliki sedikit energi?",
+                        "Seberapa sering Anda memiliki nafsu makan yang buruk atau berlebihan?",
+                        "Seberapa sering Anda merasa buruk tentang diri sendiri - atau bahwa Anda adalah seorang yang gagal atau telah mengecewakan diri sendiri atau keluarga Anda?",
+                        "Seberapa sering Anda mengalami kesulitan berkonsentrasi pada hal-hal, seperti membaca koran atau menonton televisi?",
+                        "Seberapa sering Anda bergerak atau berbicara sangat lambat sehingga orang lain mungkin memperhatikannya? Atau sebaliknya - sangat gelisah atau resah sehingga Anda bergerak lebih banyak dari biasanya?",
+                        "Seberapa sering Anda memiliki pikiran bahwa Anda akan lebih baik mati atau melukai diri sendiri dengan cara tertentu?"
+                    ],
+                    options: [
+                        "Tidak sama sekali",
+                        "Beberapa hari",
+                        "Lebih dari setengah hari",
+                        "Hampir setiap hari"
+                    ],
+                    points: 25,
+                    scoring: [0, 1, 2, 3],
+                    resultCategories: [
+                        { min: 0, max: 4, category: "Minimal", description: "Tidak ada gejala depresi yang signifikan" },
+                        { min: 5, max: 9, category: "Ringan", description: "Gejala depresi ringan" },
+                        { min: 10, max: 14, category: "Sedang", description: "Gejala depresi sedang" },
+                        { min: 15, max: 19, category: "Sedang Berat", description: "Gejala depresi sedang-berat" },
+                        { min: 20, max: 27, category: "Berat", description: "Gejala depresi berat" }
+                    ]
+                },
+                gad7: {
+                    title: "Tes Kecemasan (GAD-7)",
+                    questions: [
+                        "Seberapa sering Anda merasa gelisah, gugup, atau tegang?",
+                        "Seberapa sering Anda tidak dapat menghentikan atau mengendalikan kekhawatiran?",
+                        "Seberapa sering Anda mengkhawatirkan terlalu banyak tentang berbagai hal?",
+                        "Seberapa sering Anda mengalami kesulitan untuk bersantai?",
+                        "Seberapa sering Anda merasa sangat gelisah sehingga sulit untuk duduk diam?",
+                        "Seberapa sering Anda menjadi mudah kesal atau marah?",
+                        "Seberapa sering Anda merasa takut seolah-olah sesuatu yang mengerikan akan terjadi?"
+                    ],
+                    options: [
+                        "Tidak sama sekali",
+                        "Beberapa hari",
+                        "Lebih dari setengah hari",
+                        "Hampir setiap hari"
+                    ],
+                    points: 25,
+                    scoring: [0, 1, 2, 3],
+                    resultCategories: [
+                        { min: 0, max: 4, category: "Minimal", description: "Tidak ada gejala kecemasan yang signifikan" },
+                        { min: 5, max: 9, category: "Ringan", description: "Gejala kecemasan ringan" },
+                        { min: 10, max: 14, category: "Sedang", description: "Gejala kecemasan sedang" },
+                        { min: 15, max: 21, category: "Berat", description: "Gejala kecemasan berat" }
+                    ]
+                }
+            },
+            currentTest: null,
+            currentQuestionIndex: 0,
+            testAnswers: [],
+            
+            // Data untuk misi harian dan poin
+            dailyMissions: [
+                {
+                    id: 1,
+                    title: "Login Harian",
+                    description: "Login ke aplikasi setiap hari",
+                    icon: "calendar-day",
+                    points: 10,
+                    completed: false
+                },
+                {
+                    id: 2,
+                    title: "Tes Kesehatan Mental",
+                    description: "Selesaikan salah satu tes kesehatan mental",
+                    icon: "clipboard-check",
+                    points: 25,
+                    completed: false
+                },
+                {
+                    id: 3,
+                    title: "Berbagi Cerita",
+                    description: "Bagikan cerita atau pengalaman di komunitas",
+                    icon: "users",
+                    points: 15,
+                    completed: false
+                },
+                {
+                    id: 4,
+                    title: "Meditasi 10 Menit",
+                    description: "Lakukan meditasi selama minimal 10 menit",
+                    icon: "spa",
+                    points: 20,
+                    completed: false
+                }
+            ],
+            userPoints: parseInt(localStorage.getItem('userPoints')) || 0,
+            loginStreak: parseInt(localStorage.getItem('loginStreak')) || 0,
+            lastLoginDate: localStorage.getItem('lastLoginDate') || null,
+            weeklyConsultations: parseInt(localStorage.getItem('weeklyConsultations')) || 0,
+            lastConsultationReset: localStorage.getItem('lastConsultationReset') || null,
+            
+            // Data pengguna
+            users: JSON.parse(localStorage.getItem('users')) || [
+                {
+                    id: 1,
+                    name: "User Demo",
+                    email: "demo@bloom.com",
+                    password: "demo123"
+                }
+            ]
+        };
+
+        // Inisialisasi aplikasi
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupEventListeners();
+            renderCommunityPosts();
+            renderPsychologists();
+            renderMeditations();
+            renderDailyMissions();
+            updatePointsDisplay();
+            updateLoginStreak();
+            checkWeeklyReset();
+            updateSectionAccess();
+        });
+
+        function initializeApp() {
+            // Cek apakah pengguna sudah login
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                appData.currentUser = JSON.parse(savedUser);
+                updateLoginState();
+            }
+            
+            // Periksa apakah perlu reset konsultasi mingguan
+            checkWeeklyReset();
+        }
+
+        function setupEventListeners() {
+            // Navigasi
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Login & Register
+            document.getElementById('loginBtn').addEventListener('click', openLoginModal);
+            document.getElementById('registerBtn').addEventListener('click', openRegisterModal);
+            document.getElementById('closeLoginModal').addEventListener('click', closeLoginModal);
+            document.getElementById('closeRegisterModal').addEventListener('click', closeRegisterModal);
+            document.getElementById('submitLogin').addEventListener('click', submitLogin);
+            document.getElementById('submitRegister').addEventListener('click', submitRegister);
+            document.getElementById('switchToRegister').addEventListener('click', switchToRegister);
+            document.getElementById('switchToLogin').addEventListener('click', switchToLogin);
+
+            // Login dari section yang terkunci
+            document.querySelectorAll('.login-from-section').forEach(button => {
+                button.addEventListener('click', openLoginModal);
+            });
+
+            // Notifikasi positif
+            setTimeout(function() {
+                const notification = document.querySelector('.fixed.top-20');
+                if (notification) {
+                    notification.style.display = 'none';
+                }
+            }, 5000);
+
+            // Tes kesehatan mental
+            const startTestButtons = document.querySelectorAll('.start-test');
+            startTestButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const testType = this.getAttribute('data-test');
+                    startTest(testType);
+                });
+            });
+
+            // Modal tes
+            document.getElementById('closeTestModal').addEventListener('click', closeTestModal);
+            document.getElementById('prevQuestion').addEventListener('click', prevQuestion);
+            document.getElementById('nextQuestion').addEventListener('click', nextQuestion);
+
+            // Berbagi cerita
+            document.getElementById('shareStoryBtn').addEventListener('click', openShareStoryModal);
+            document.getElementById('closeShareModal').addEventListener('click', closeShareStoryModal);
+            document.getElementById('cancelStory').addEventListener('click', closeShareStoryModal);
+            document.getElementById('submitStory').addEventListener('click', submitStory);
+
+            // Konsultasi
+            document.getElementById('consultationBtn').addEventListener('click', function() {
+                openConsultationModal(1); // Default ke psikolog pertama
+            });
+            document.getElementById('quickTestBtn').addEventListener('click', function() {
+                startTest('phq9');
+            });
+            document.getElementById('closeConsultationModal').addEventListener('click', closeConsultationModal);
+
+            // Meditasi
+            document.getElementById('playPause').addEventListener('click', togglePlayPause);
+            document.getElementById('prevTrack').addEventListener('click', prevTrack);
+            document.getElementById('nextTrack').addEventListener('click', nextTrack);
+            document.getElementById('playRelaxation').addEventListener('click', playRelaxation);
+
+            // Ulangi tes
+            document.getElementById('retakeTest').addEventListener('click', function() {
+                document.getElementById('testResults').style.display = 'none';
+            });
+
+            // Daily Login
+            document.getElementById('dailyLoginBtn').addEventListener('click', processDailyLogin);
+        }
+
+        function updateSectionAccess() {
+            const isLoggedIn = appData.currentUser !== null;
+            
+            // Semua overlay section
+            const overlays = [
+                'loginOverlay', 'missionsOverlay', 'pointsInfoOverlay', 
+                'testsOverlay', 'communityOverlay', 'consultationOverlay', 
+                'meditationOverlay', 'musicOverlay'
+            ];
+            
+            // Tampilkan atau sembunyikan overlay berdasarkan status login
+            overlays.forEach(overlayId => {
+                const overlay = document.getElementById(overlayId);
+                if (overlay) {
+                    overlay.style.display = isLoggedIn ? 'none' : 'flex';
+                }
+            });
+            
+            // Update status tombol berdasarkan login
+            const actionButtons = document.querySelectorAll('.start-test, #shareStoryBtn, #consultationBtn, #quickTestBtn, .start-meditation, #playRelaxation, #dailyLoginBtn, .book-consultation');
+            actionButtons.forEach(button => {
+                if (!isLoggedIn) {
+                    button.setAttribute('disabled', 'true');
+                    button.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    button.removeAttribute('disabled');
+                    button.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            });
+        }
+
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function openRegisterModal() {
+            document.getElementById('registerModal').style.display = 'flex';
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').style.display = 'none';
+        }
+
+        function switchToRegister() {
+            closeLoginModal();
+            openRegisterModal();
+        }
+
+        function switchToLogin() {
+            closeRegisterModal();
+            openLoginModal();
+        }
+
+        function submitLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                alert('Silakan isi email dan password.');
+                return;
+            }
+            
+            // Cari pengguna
+            const user = appData.users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // Login berhasil
+                appData.currentUser = {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email
+                };
+                
+                // Simpan ke localStorage
+                localStorage.setItem('currentUser', JSON.stringify(appData.currentUser));
+                
+                // Update UI
+                updateLoginState();
+                updateSectionAccess();
+                closeLoginModal();
+                
+                alert(`Selamat datang, ${user.name}!`);
+            } else {
+                alert('Email atau password salah. Silakan coba lagi.\n\nAkun demo: demo@bloom.com / demo123');
+            }
+        }
+
+        function submitRegister() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            
+            if (!name || !email || !password || !confirmPassword) {
+                alert('Silakan lengkapi semua field.');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Password dan konfirmasi password tidak cocok.');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('Password harus minimal 6 karakter.');
+                return;
+            }
+            
+            if (!agreeTerms) {
+                alert('Anda harus menyetujui Syarat & Ketentuan.');
+                return;
+            }
+            
+            // Cek apakah email sudah terdaftar
+            const existingUser = appData.users.find(u => u.email === email);
+            if (existingUser) {
+                alert('Email sudah terdaftar. Silakan gunakan email lain.');
+                return;
+            }
+            
+            // Buat pengguna baru
+            const newUser = {
+                id: appData.users.length + 1,
+                name: name,
+                email: email,
+                password: password
+            };
+            
+            appData.users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(appData.users));
+            
+            // Login otomatis setelah registrasi
+            appData.currentUser = {
+                id: newUser.id,
+                name: newUser.name,
+                email: newUser.email
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(appData.currentUser));
+            
+            // Update UI
+            updateLoginState();
+            updateSectionAccess();
+            closeRegisterModal();
+            
+            alert(`Pendaftaran berhasil! Selamat datang, ${name}!`);
+        }
+
+        function updateLoginState() {
+            const loginBtn = document.getElementById('loginBtn');
+            const registerBtn = document.getElementById('registerBtn');
+            const pointsDisplay = document.getElementById('pointsDisplay');
+            
+            if (appData.currentUser) {
+                loginBtn.textContent = appData.currentUser.name;
+                registerBtn.textContent = 'Keluar';
+                registerBtn.onclick = logout;
+                pointsDisplay.classList.remove('hidden');
+                updatePointsDisplay();
+            } else {
+                loginBtn.textContent = 'Masuk';
+                registerBtn.textContent = 'Daftar';
+                registerBtn.onclick = openRegisterModal;
+                pointsDisplay.classList.add('hidden');
+            }
+        }
+
+        function logout() {
+            appData.currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateLoginState();
+            updateSectionAccess();
+            alert('Anda telah berhasil keluar.');
+        }
+
+        function processDailyLogin() {
+            if (!appData.currentUser) {
+                alert('Silakan login terlebih dahulu untuk mendapatkan poin harian.');
+                return;
+            }
+            
+            const today = new Date().toDateString();
+            
+            // Jika sudah login hari ini
+            if (appData.lastLoginDate === today) {
+                alert('Anda sudah login hari ini. Kembali besok untuk mendapatkan poin lagi!');
+                return;
+            }
+            
+            // Update streak login
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            if (appData.lastLoginDate === yesterday.toDateString()) {
+                appData.loginStreak += 1;
+            } else {
+                appData.loginStreak = 1;
+            }
+            
+            // Tambahkan poin
+            addPoints(10, 'Login Harian');
+            
+            // Update data
+            appData.lastLoginDate = today;
+            localStorage.setItem('lastLoginDate', appData.lastLoginDate);
+            localStorage.setItem('loginStreak', appData.loginStreak.toString());
+            
+            // Update tampilan
+            updateLoginStreak();
+            updatePointsDisplay();
+            
+            // Tandai misi sebagai selesai
+            completeMission(1);
+            
+            alert(`Selamat! Anda mendapatkan 10 poin untuk login hari ini.\nStreak login Anda: ${appData.loginStreak} hari berturut-turut.`);
+        }
+
+        function updateLoginStreak() {
+            document.getElementById('streakCount').textContent = appData.loginStreak;
+        }
+
+        function renderDailyMissions() {
+            const container = document.querySelector('#misi .grid');
+            container.innerHTML = '';
+            
+            // Load completed missions from localStorage
+            const savedMissions = JSON.parse(localStorage.getItem('dailyMissions'));
+            if (savedMissions) {
+                appData.dailyMissions = savedMissions;
+            }
+            
+            appData.dailyMissions.forEach(mission => {
+                const missionElement = document.createElement('div');
+                missionElement.className = 'bg-white rounded-2xl p-6 shadow-sm card-hover';
+                missionElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-${mission.icon} text-green-500 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">${mission.title}</h3>
+                                <p class="text-sm text-gray-600">${mission.description}</p>
+                            </div>
+                        </div>
+                        <div class="points-badge text-white px-3 py-1 rounded-full text-sm font-medium">
+                            +${mission.points} Poin
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center ${mission.completed ? 'text-green-500' : 'text-gray-500'}">
+                            <i class="fas ${mission.completed ? 'fa-check-circle' : 'fa-circle'} mr-2"></i>
+                            <span>${mission.completed ? 'Selesai' : 'Belum Selesai'}</span>
+                        </div>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition duration-300 ${mission.completed ? 'opacity-50 cursor-not-allowed' : ''}" 
+                                ${mission.completed ? 'disabled' : ''}
+                                onclick="completeMission(${mission.id})">
+                            ${mission.completed ? 'Selesai' : 'Tandai Selesai'}
+                        </button>
+                    </div>
+                `;
+                container.appendChild(missionElement);
+            });
+        }
+
+        function completeMission(missionId) {
+            if (!appData.currentUser) {
+                alert('Silakan login terlebih dahulu untuk menyelesaikan misi.');
+                return;
+            }
+            
+            const mission = appData.dailyMissions.find(m => m.id === missionId);
+            
+            if (mission && !mission.completed) {
+                mission.completed = true;
+                addPoints(mission.points, mission.title);
+                renderDailyMissions();
+                
+                // Simpan status misi ke localStorage
+                localStorage.setItem('dailyMissions', JSON.stringify(appData.dailyMissions));
+            }
+        }
+
+        function addPoints(points, reason) {
+            appData.userPoints += points;
+            localStorage.setItem('userPoints', appData.userPoints.toString());
+            updatePointsDisplay();
+            
+            // Tampilkan notifikasi poin
+            showPointsNotification(points, reason);
+        }
+
+        function updatePointsDisplay() {
+            document.getElementById('pointsValue').textContent = appData.userPoints;
+        }
+
+        function showPointsNotification(points, reason) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-20 right-6 z-50 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow-md max-w-sm';
+            notification.innerHTML = `
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-coins text-green-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium">+${points} Poin!</p>
+                        <p class="text-xs">${reason}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function renderCommunityPosts() {
+            const container = document.getElementById('communityPosts');
+            container.innerHTML = '';
+            
+            appData.communityPosts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.className = 'bg-green-50 rounded-2xl p-6 card-hover';
+                postElement.innerHTML = `
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-green-200 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-user-secret text-green-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800">Pengguna Anonim</h3>
+                            <p class="text-xs text-gray-500">${post.timestamp}</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">${post.content}</p>
+                    <div class="flex text-gray-500 text-sm">
+                        <div class="flex items-center mr-4">
+                            <i class="far fa-heart mr-1"></i> ${post.likes}
+                        </div>
+                        <div class="flex items-center">
+                            <i class="far fa-comment mr-1"></i> ${post.comments}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(postElement);
+            });
+        }
+
+        function renderPsychologists() {
+            const container = document.querySelector('#konsultasi .grid');
+            container.innerHTML = '';
+            
+            appData.psychologists.forEach(psychologist => {
+                const psychologistElement = document.createElement('div');
+                psychologistElement.className = 'bg-white rounded-2xl shadow-lg overflow-hidden card-hover';
+                psychologistElement.innerHTML = `
+                    <div class="h-40 bg-green-100 flex items-center justify-center">
+                        <div class="w-24 h-24 bg-green-200 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user-md text-green-600 text-3xl"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-1">${psychologist.name}</h3>
+                        <p class="text-green-500 font-medium mb-3">${psychologist.specialty}</p>
+                        <p class="text-gray-600 mb-4">${psychologist.description}</p>
+                        <div class="flex items-center text-gray-500 mb-4">
+                            <i class="fas fa-star text-yellow-400 mr-1"></i>
+                            <span class="font-medium">${psychologist.rating}</span>
+                            <span class="mx-1">•</span>
+                            <span>${psychologist.consultations} konsultasi</span>
+                        </div>
+                        <button class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg font-medium transition duration-300 book-consultation" data-id="${psychologist.id}">
+                            Buat Janji
+                        </button>
+                    </div>
+                `;
+                container.appendChild(psychologistElement);
+            });
+            
+            // Tambahkan event listener untuk tombol buat janji
+            document.querySelectorAll('.book-consultation').forEach(button => {
+                button.addEventListener('click', function() {
+                    const psychologistId = parseInt(this.getAttribute('data-id'));
+                    openConsultationModal(psychologistId);
+                });
+            });
+        }
+
+        function openConsultationModal(psychologistId) {
+            if (!appData.currentUser) {
+                alert('Silakan login terlebih dahulu untuk membuat janji konsultasi.');
+                return;
+            }
+            
+            const psychologist = appData.psychologists.find(p => p.id === psychologistId);
+            if (!psychologist) return;
+            
+            document.getElementById('consultationTitle').textContent = `Konsultasi dengan ${psychologist.name}`;
+            
+            const formContainer = document.getElementById('consultationForm');
+            formContainer.innerHTML = `
+                <div class="mb-6">
+                    <h4 class="font-bold text-gray-700 mb-3">Pilih Jenis Konsultasi</h4>
+                    <div class="space-y-3" id="consultationTypeOptions">
+                        ${appData.consultationTypes.map(type => `
+                            <div class="consultation-type" data-type="${type.id}">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-${type.icon} text-green-500"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="font-medium text-gray-800">${type.name}</div>
+                                        <div class="text-sm text-gray-600">${type.description}</div>
+                                    </div>
+                                    <div class="text-green-500 font-medium">${type.price}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="font-bold text-gray-700 mb-3">Pilih Tanggal</h4>
+                    <div class="grid grid-cols-3 gap-2" id="dateOptions">
+                        ${psychologist.availableSlots.map(slot => `
+                            <div class="date-option text-center p-2 border rounded-lg cursor-pointer" data-date="${slot.date}">
+                                <div class="font-medium">${formatDate(slot.date)}</div>
+                                <div class="text-xs text-gray-500">${getDayName(slot.date)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="mb-6" id="timeSlotsContainer" style="display: none;">
+                    <h4 class="font-bold text-gray-700 mb-3">Pilih Waktu</h4>
+                    <div id="timeSlots"></div>
+                </div>
+                
+                <div class="mb-6" id="consultationSummary" style="display: none;">
+                    <h4 class="font-bold text-gray-700 mb-3">Ringkasan Konsultasi</h4>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-600">Psikolog:</span>
+                            <span class="font-medium">${psychologist.name}</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-600">Jenis:</span>
+                            <span class="font-medium" id="summaryType">-</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-600">Tanggal:</span>
+                            <span class="font-medium" id="summaryDate">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Waktu:</span>
+                            <span class="font-medium" id="summaryTime">-</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end">
+                    <button id="cancelConsultation" class="text-gray-500 hover:text-gray-700 font-medium mr-4">
+                        Batal
+                    </button>
+                    <button id="submitConsultation" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium" disabled>
+                        Buat Janji
+                    </button>
+                </div>
+            `;
+            
+            // Setup event listeners untuk form konsultasi
+            setupConsultationForm(psychologist);
+            
+            // Tampilkan modal
+            document.getElementById('consultationModal').style.display = 'flex';
+        }
+
+        function setupConsultationForm(psychologist) {
+            let selectedType = null;
+            let selectedDate = null;
+            let selectedTime = null;
+            
+            // Event listener untuk jenis konsultasi
+            document.querySelectorAll('.consultation-type').forEach(typeElement => {
+                typeElement.addEventListener('click', function() {
+                    document.querySelectorAll('.consultation-type').forEach(el => {
+                        el.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    selectedType = parseInt(this.getAttribute('data-type'));
+                    updateSubmitButton();
+                });
+            });
+            
+            // Event listener untuk tanggal
+            document.querySelectorAll('.date-option').forEach(dateElement => {
+                dateElement.addEventListener('click', function() {
+                    document.querySelectorAll('.date-option').forEach(el => {
+                        el.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    selectedDate = this.getAttribute('data-date');
+                    
+                    // Tampilkan waktu yang tersedia untuk tanggal ini
+                    const slot = psychologist.availableSlots.find(s => s.date === selectedDate);
+                    if (slot) {
+                        const timeSlotsContainer = document.getElementById('timeSlots');
+                        timeSlotsContainer.innerHTML = '';
+                        
+                        slot.times.forEach(time => {
+                            const timeElement = document.createElement('div');
+                            timeElement.className = 'time-slot';
+                            timeElement.textContent = time;
+                            timeElement.setAttribute('data-time', time);
+                            timeElement.addEventListener('click', function() {
+                                document.querySelectorAll('.time-slot').forEach(el => {
+                                    el.classList.remove('selected');
+                                });
+                                this.classList.add('selected');
+                                selectedTime = this.getAttribute('data-time');
+                                updateSummary();
+                                updateSubmitButton();
+                            });
+                            timeSlotsContainer.appendChild(timeElement);
+                        });
+                        
+                        document.getElementById('timeSlotsContainer').style.display = 'block';
+                    }
+                    
+                    updateSummary();
+                    updateSubmitButton();
+                });
+            });
+            
+            // Event listener untuk tombol batal
+            document.getElementById('cancelConsultation').addEventListener('click', closeConsultationModal);
+            
+            // Event listener untuk tombol submit
+            document.getElementById('submitConsultation').addEventListener('click', function() {
+                submitConsultation(psychologist, selectedType, selectedDate, selectedTime);
+            });
+            
+            function updateSummary() {
+                if (selectedType && selectedDate && selectedTime) {
+                    const typeName = appData.consultationTypes.find(t => t.id === selectedType).name;
+                    document.getElementById('summaryType').textContent = typeName;
+                    document.getElementById('summaryDate').textContent = formatDate(selectedDate);
+                    document.getElementById('summaryTime').textContent = selectedTime;
+                    document.getElementById('consultationSummary').style.display = 'block';
+                }
+            }
+            
+            function updateSubmitButton() {
+                const submitButton = document.getElementById('submitConsultation');
+                if (selectedType && selectedDate && selectedTime) {
+                    submitButton.disabled = false;
+                    
+                    // Cek apakah konsultasi gratis atau perlu poin
+                    const consultationType = appData.consultationTypes.find(t => t.id === selectedType);
+                    if (consultationType.price.includes("Gratis")) {
+                        // Cek apakah masih ada kuota konsultasi gratis mingguan
+                        if (appData.weeklyConsultations < 2) {
+                            submitButton.textContent = "Buat Janji (Gratis)";
+                        } else {
+                            submitButton.textContent = "Kuota Gratis Habis";
+                            submitButton.disabled = true;
+                        }
+                    } else {
+                        const pointsNeeded = parseInt(consultationType.price);
+                        if (appData.userPoints >= pointsNeeded) {
+                            submitButton.textContent = `Buat Janji (${pointsNeeded} Poin)`;
+                        } else {
+                            submitButton.textContent = "Poin Tidak Cukup";
+                            submitButton.disabled = true;
+                        }
+                    }
+                } else {
+                    submitButton.disabled = true;
+                    submitButton.textContent = "Buat Janji";
+                }
+            }
+        }
+
+        function submitConsultation(psychologist, typeId, date, time) {
+            if (!appData.currentUser) return;
+            
+            const consultationType = appData.consultationTypes.find(t => t.id === typeId);
+            const typeName = consultationType.name;
+            
+            // Cek apakah konsultasi gratis atau perlu poin
+            if (consultationType.price.includes("Gratis")) {
+                // Gunakan konsultasi gratis
+                appData.weeklyConsultations += 1;
+                localStorage.setItem('weeklyConsultations', appData.weeklyConsultations.toString());
+                
+                alert(`Janji konsultasi berhasil dibuat!\n\nDetail:\n- Psikolog: ${psychologist.name}\n- Jenis: ${typeName}\n- Tanggal: ${formatDate(date)}\n- Waktu: ${time}\n\nKonsultasi gratis Anda: ${appData.weeklyConsultations}/2 per minggu`);
+            } else {
+                // Gunakan poin
+                const pointsNeeded = parseInt(consultationType.price);
+                if (appData.userPoints >= pointsNeeded) {
+                    appData.userPoints -= pointsNeeded;
+                    localStorage.setItem('userPoints', appData.userPoints.toString());
+                    updatePointsDisplay();
+                    
+                    alert(`Janji konsultasi berhasil dibuat!\n\nDetail:\n- Psikolog: ${psychologist.name}\n- Jenis: ${typeName}\n- Tanggal: ${formatDate(date)}\n- Waktu: ${time}\n\nPoin terpakai: ${pointsNeeded}\nSisa poin: ${appData.userPoints}`);
+                } else {
+                    alert('Poin tidak cukup untuk membuat janji konsultasi.');
+                    return;
+                }
+            }
+            
+            // Simpan riwayat konsultasi
+            const consultationHistory = JSON.parse(localStorage.getItem('consultationHistory')) || [];
+            consultationHistory.push({
+                id: consultationHistory.length + 1,
+                psychologist: psychologist.name,
+                type: typeName,
+                date: date,
+                time: time,
+                timestamp: new Date().toISOString()
+            });
+            localStorage.setItem('consultationHistory', JSON.stringify(consultationHistory));
+            
+            closeConsultationModal();
+        }
+
+        function closeConsultationModal() {
+            document.getElementById('consultationModal').style.display = 'none';
+        }
+
+        function renderMeditations() {
+            const container = document.querySelector('#meditasi .grid');
+            container.innerHTML = '';
+            
+            appData.meditations.forEach(meditation => {
+                const meditationElement = document.createElement('div');
+                meditationElement.className = 'bg-green-50 rounded-2xl overflow-hidden card-hover';
+                meditationElement.innerHTML = `
+                    <div class="h-40 bg-green-200 flex items-center justify-center">
+                        <i class="fas fa-${meditation.icon} text-green-600 text-4xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-gray-800">${meditation.title}</h3>
+                            <div class="points-badge text-white px-2 py-1 rounded-full text-xs font-medium">
+                                +${meditation.points} Poin
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">${meditation.description}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-sm">${meditation.duration}</span>
+                            <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded-full text-sm font-medium transition duration-300 start-meditation" data-id="${meditation.id}">
+                                Mulai
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(meditationElement);
+            });
+        }
+
+        function checkWeeklyReset() {
+            const now = new Date();
+            const lastReset = appData.lastConsultationReset ? new Date(appData.lastConsultationReset) : null;
+            
+            // Reset setiap minggu (setiap hari Senin)
+            if (!lastReset || (now.getDay() === 1 && (now - lastReset) >= 7 * 24 * 60 * 60 * 1000)) {
+                appData.weeklyConsultations = 0;
+                appData.lastConsultationReset = now.toISOString();
+                localStorage.setItem('weeklyConsultations', '0');
+                localStorage.setItem('lastConsultationReset', appData.lastConsultationReset);
+            }
+        }
+
+        // Fungsi-fungsi untuk tes kesehatan mental yang berfungsi
+        function startTest(testType) {
+            if (!appData.currentUser) {
+                alert('Silakan login terlebih dahulu untuk melakukan tes kesehatan mental.');
+                return;
+            }
+            
+            // Inisialisasi tes
+            appData.currentTest = testType;
+            appData.currentQuestionIndex = 0;
+            appData.testAnswers = [];
+            
+            // Tampilkan modal tes
+            document.getElementById('testTitle').textContent = appData.tests[testType].title;
+            document.getElementById('testModal').style.display = 'flex';
+            
+            // Tampilkan pertanyaan pertama
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const test = appData.tests[appData.currentTest];
+            const question = test.questions[appData.currentQuestionIndex];
+            
+            // Update progress bar
+            const progress = ((appData.currentQuestionIndex + 1) / test.questions.length) * 100;
+            document.getElementById('testProgress').style.width = `${progress}%`;
+            
+            // Update counter pertanyaan
+            document.getElementById('testQuestionCounter').textContent = `Pertanyaan ${appData.currentQuestionIndex + 1}/${test.questions.length}`;
+            
+            // Tampilkan pertanyaan
+            document.getElementById('testQuestion').innerHTML = `
+                <h4 class="text-lg font-medium text-gray-800 mb-4">${question}</h4>
+            `;
+            
+            // Tampilkan opsi jawaban
+            const optionsContainer = document.getElementById('testOptions');
+            optionsContainer.innerHTML = '';
+            
+            test.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-green-50 option';
+                optionElement.innerHTML = `
+                    <div class="w-5 h-5 rounded-full border border-gray-300 mr-3 flex items-center justify-center">
+                        <div class="w-3 h-3 rounded-full bg-green-500 hidden"></div>
+                    </div>
+                    <span>${option}</span>
+                `;
+                optionElement.dataset.value = index;
+                
+                // Jika sudah ada jawaban untuk pertanyaan ini, tandai opsi yang dipilih
+                if (appData.testAnswers[appData.currentQuestionIndex] === index) {
+                    optionElement.classList.add('bg-green-50', 'border-green-500');
+                    optionElement.querySelector('.w-3').classList.remove('hidden');
+                }
+                
+                optionElement.addEventListener('click', function() {
+                    // Hapus seleksi dari semua opsi
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('bg-green-50', 'border-green-500');
+                        opt.querySelector('.w-3').classList.add('hidden');
+                    });
+                    
+                    // Tandai opsi yang dipilih
+                    this.classList.add('bg-green-50', 'border-green-500');
+                    this.querySelector('.w-3').classList.remove('hidden');
+                    
+                    // Simpan jawaban
+                    appData.testAnswers[appData.currentQuestionIndex] = parseInt(this.dataset.value);
+                    
+                    // Aktifkan tombol selanjutnya
+                    document.getElementById('nextQuestion').disabled = false;
+                });
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update tombol navigasi
+            document.getElementById('prevQuestion').style.display = appData.currentQuestionIndex > 0 ? 'block' : 'none';
+            
+            // Nonaktifkan tombol selanjutnya jika belum memilih jawaban
+            document.getElementById('nextQuestion').disabled = appData.testAnswers[appData.currentQuestionIndex] === undefined;
+            
+            // Ubah teks tombol selanjutnya jika ini adalah pertanyaan terakhir
+            if (appData.currentQuestionIndex === test.questions.length - 1) {
+                document.getElementById('nextQuestion').textContent = 'Selesai';
+            } else {
+                document.getElementById('nextQuestion').textContent = 'Selanjutnya';
+            }
+        }
+
+        function prevQuestion() {
+            if (appData.currentQuestionIndex > 0) {
+                appData.currentQuestionIndex--;
+                showQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            const test = appData.tests[appData.currentTest];
+            
+            // Jika belum memilih jawaban, tidak bisa lanjut
+            if (appData.testAnswers[appData.currentQuestionIndex] === undefined) {
+                alert('Silakan pilih jawaban terlebih dahulu.');
+                return;
+            }
+            
+            // Jika ini adalah pertanyaan terakhir, selesaikan tes
+            if (appData.currentQuestionIndex === test.questions.length - 1) {
+                finishTest();
+                return;
+            }
+            
+            // Lanjut ke pertanyaan berikutnya
+            appData.currentQuestionIndex++;
+            showQuestion();
+        }
+
+        function finishTest() {
+            const test = appData.tests[appData.currentTest];
+            
+            // Hitung skor
+            let totalScore = 0;
+            for (let i = 0; i < test.questions.length; i++) {
+                totalScore += test.scoring[appData.testAnswers[i]];
+            }
+            
+            // Tentukan kategori hasil
+            let resultCategory = null;
+            for (const category of test.resultCategories) {
+                if (totalScore >= category.min && totalScore <= category.max) {
+                    resultCategory = category;
+                    break;
+                }
+            }
+            
+            // Simpan hasil tes
+            const testResult = {
+                testType: appData.currentTest,
+                testName: test.title,
+                score: totalScore,
+                maxScore: test.scoring[test.scoring.length - 1] * test.questions.length,
+                category: resultCategory.category,
+                description: resultCategory.description,
+                date: new Date().toISOString()
+            };
+            
+            appData.testResults.push(testResult);
+            localStorage.setItem('testResults', JSON.stringify(appData.testResults));
+            
+            // Tambahkan poin
+            addPoints(test.points, test.title);
+            
+            // Tandai misi sebagai selesai
+            completeMission(2);
+            
+            // Tutup modal tes
+            closeTestModal();
+            
+            // Tampilkan hasil tes
+            showTestResult(testResult);
+        }
+
+        function showTestResult(result) {
+            // Hitung persentase skor
+            const percentage = Math.round((result.score / result.maxScore) * 100);
+            
+            // Update elemen hasil tes
+            document.getElementById('scoreText').textContent = `${percentage}%`;
+            document.getElementById('scoreCategory').textContent = result.category;
+            document.getElementById('resultDetails').innerHTML = `
+                <p class="mb-2">Skor Anda: ${result.score} dari ${result.maxScore}</p>
+                <p>${result.description}</p>
+            `;
+            
+            // Update lingkaran skor
+            const circle = document.getElementById('scoreCircle');
+            const circumference = 2 * Math.PI * 45;
+            const offset = circumference - (percentage / 100) * circumference;
+            circle.style.strokeDasharray = `${circumference}`;
+            circle.style.strokeDashoffset = `${offset}`;
+            
+            // Tampilkan hasil tes
+            document.getElementById('testResults').style.display = 'block';
+            
+            // Scroll ke hasil tes
+            document.getElementById('testResults').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeTestModal() {
+            document.getElementById('testModal').style.display = 'none';
+        }
+
+        // Helper functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        function getDayName(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', { weekday: 'long' });
+        }
+
+        // Fungsi-fungsi dummy untuk demo
+        function openShareStoryModal() {
+            if (!appData.currentUser) {
+                alert('Silakan login terlebih dahulu untuk berbagi cerita.');
+                return;
+            }
+            
+            alert('Fitur berbagi cerita akan dibuka.');
+        }
+
+        function closeShareStoryModal() {
+            document.getElementById('shareStoryModal').style.display = 'none';
+        }
+
+        function submitStory() {
+            alert('Cerita berhasil dibagikan!');
+            closeShareStoryModal();
+        }
+
+        function togglePlayPause() {
+            // Player implementation
+        }
+
+        function prevTrack() {
+            // Player implementation
+        }
+
+        function nextTrack() {
+            // Player implementation
+        }
+
+        function playRelaxation() {
+            if (!appData.currentUser) {
+                alert('Silakan login terlebih dahulu untuk memutar musik relaksasi.');
+                return;
+            }
+            // Player implementation
+        }
+
+        // Make functions globally available for onclick attributes
+        window.completeMission = completeMission;
+        window.openLoginModal = openLoginModal;
+    </script>
+</body>
+</html>
